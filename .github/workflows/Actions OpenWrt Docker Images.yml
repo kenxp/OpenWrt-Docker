@@ -127,7 +127,7 @@ jobs:
           #make image PACKAGES="$CONFIG_PACKAGES" FILES="files" 只编译不生成docker
           make image PACKAGES="$CONFIG_PACKAGES"
           #cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz $GITHUB_WORKSPACE
-          cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz $GITHUB_WORKSPACE/openwrt_x86.rootfs.tar.gz
+          cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz $GITHUB_WORKSPACE/immortalwrt_$DEVICE_VERSION_x86_64.rootfs.tar.gz
                   
       - name: Delete Image Builder
         run: |
@@ -178,5 +178,5 @@ jobs:
       - name: Upload Image
         uses: actions/upload-artifact@v3
         with:
-          name: openwrt_x86.rootfs.tar.gz
-          path: openwrt_x86.rootfs.tar.gz 
+          name: immortalwrt_$DEVICE_VERSION_x86_64.rootfs.tar.gz
+          path: immortalwrt_$DEVICE_VERSION_x86_64.rootfs.tar.gz 
