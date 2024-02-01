@@ -8,6 +8,19 @@
 # Blog: https://mlapp.cn
 #=================================================
 
+# 修改image生成种类
+sed -i 's/CONFIG_TARGET_ROOTFS_EXT4FS/# CONFIG_TARGET_ROOTFS_EXT4FS/' .config
+sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS/# CONFIG_TARGET_ROOTFS_SQUASHFS/' .config
+sed -i 's/CONFIG_GRUB_IMAGES/# CONFIG_GRUB_IMAGES/' .config
+sed -i 's/CONFIG_GRUB_EFI_IMAGES/# CONFIG_GRUB_EFI_IMAGES/' .config
+sed -i 's/CONFIG_ISO_IMAGES/# CONFIG_ISO_IMAGES/' .config
+sed -i 's/CONFIG_QCOW2_IMAGES/# CONFIG_QCOW2_IMAGES/' .config
+sed -i 's/CONFIG_VDI_IMAGES/# CONFIG_VDI_IMAGES/' .config
+sed -i 's/CONFIG_VMDK_IMAGES/# CONFIG_VMDK_IMAGES/' .config
+sed -i 's/CONFIG_VHDX_IMAGES/# CONFIG_VHDX_IMAGES/' .config
+sed -i 's/CONFIG_TARGET_IMAGES_GZIP/# CONFIG_TARGET_IMAGES_GZIP/' .config
+cat .config
+
 # mkdir -p files/root
 # pushd files/root
 
