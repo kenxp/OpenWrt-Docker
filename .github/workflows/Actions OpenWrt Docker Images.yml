@@ -181,3 +181,9 @@ jobs:
         with:
           name: immortalwrt_23.05-SNAPSHOT_x86_64.rootfs.tar.gz
           path: immortalwrt_23.05-SNAPSHOT_x86_64.rootfs.tar.gz
+
+      - name: Upload Folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: immortalwrt_rootfs
+          path: $GITHUB_WORKSPACE/*.tar.gz
