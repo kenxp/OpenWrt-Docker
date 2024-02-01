@@ -19,7 +19,7 @@ sed -i 's/CONFIG_VDI_IMAGES/# CONFIG_VDI_IMAGES/' .config
 sed -i 's/CONFIG_VMDK_IMAGES/# CONFIG_VMDK_IMAGES/' .config
 sed -i 's/CONFIG_VHDX_IMAGES/# CONFIG_VHDX_IMAGES/' .config
 sed -i 's/CONFIG_TARGET_IMAGES_GZIP/# CONFIG_TARGET_IMAGES_GZIP/' .config
-cat .config
+# cat .config
 
 # mkdir -p files/root
 # pushd files/root
