@@ -130,7 +130,7 @@ jobs:
           cd immortalwrt-imagebuilder-$DEVICE_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
           chmod +x $GITHUB_WORKSPACE/scripts/*
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
-          export CONFIG_PACKAGES=$(cat $GITHUB_WORKSPACE/config/packages.config | tr -s "\n" " ")
+          export CONFIG_PACKAGES=$(cat $GITHUB_WORKSPACE/config/packages_ax3600.config | tr -s "\n" " ")
           #make image PACKAGES="$CONFIG_PACKAGES" FILES="files" 只编译不生成docker
           make image PACKAGES="$CONFIG_PACKAGES"
           #cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz $GITHUB_WORKSPACE
