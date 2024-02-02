@@ -38,7 +38,7 @@ jobs:
         env:
           INPUT_TARGET: ${{ github.event.inputs.INPUT_TARGET }}
         run: |
-          if [ "$INPUT_TARGET" = "ax3600" ] || [ "$INPUT_TARGET" = "" ]; then
+          if [ "$INPUT_TARGET" = "all" ] || [ "$INPUT_TARGET" = "ax3600" ] || [ "$INPUT_TARGET" = "" ]; then
             export TARGETS="$(cat config/platform_ax3600.config)"
           else
             export TARGETS="$INPUT_TARGET"
@@ -114,8 +114,11 @@ jobs:
           export DOCKER_EXTERA_TAG=$(echo ${{ matrix.TARGETS }} | awk -F '/' '{print $5}')
           echo "DOCKER_EXTERA_TAG=$DOCKER_EXTERA_TAG" >> $GITHUB_ENV
 
+          env
+
       - name: Download Image Builder
         run: |
+          echo url:$PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$DEVICE_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.xz
           wget -q $PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$DEVICE_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.xz
 
       - name: Set Image Builder
