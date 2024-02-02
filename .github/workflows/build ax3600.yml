@@ -9,7 +9,7 @@
 name: Build Ax3600 Images
 
 env:
-  PREFIX_URL: https://downloads.immortalwrt.org/releases/23.05-SNAPSHOT/targets/
+  PREFIX_URL: https://downloads.immortalwrt.org/releases/23.05-SNAPSHOT/targets
   DEVICE_VERSION: 23.05-SNAPSHOT
 
 on:
@@ -109,12 +109,13 @@ jobs:
           echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET" >> $GITHUB_ENV
           
           export DOCKER_IMAGE_ARCH=$(echo ${{ matrix.TARGETS }} | awk -F '/' '{print $4}' | sed 's/-/\//g')
+          echo "DOCKER_IMAGE_ARCH=$DOCKER_IMAGE_ARCH"
           echo "DOCKER_IMAGE_ARCH=$DOCKER_IMAGE_ARCH" >> $GITHUB_ENV
           
           export DOCKER_EXTERA_TAG=$(echo ${{ matrix.TARGETS }} | awk -F '/' '{print $5}')
+          echo "DOCKER_EXTERA_TAG=$DOCKER_EXTERA_TAG"
           echo "DOCKER_EXTERA_TAG=$DOCKER_EXTERA_TAG" >> $GITHUB_ENV
 
-          env
 
       - name: Download Image Builder
         run: |
