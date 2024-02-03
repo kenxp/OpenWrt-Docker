@@ -98,7 +98,7 @@ jobs:
       #     name: image
       #     path: ./bin
       
-      - name: Upload Image rootfS
+      - name: Upload Image rootfs
         uses: actions/upload-artifact@v4
         with:
           name: immortalwrt_23.05-x86_64_rootfS.tar.gz
