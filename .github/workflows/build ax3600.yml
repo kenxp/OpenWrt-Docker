@@ -147,6 +147,8 @@ jobs:
        
       - name: Copy target
         run: |  
+          cd immortalwrt-imagebuilder-$DEVICE_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
+          pwd
           ls -llah bin/targets/$DEVICE_TARGET
           echo "---------"
           ls -llah bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
