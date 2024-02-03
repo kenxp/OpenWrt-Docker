@@ -129,6 +129,13 @@ jobs:
           cp -rf $GITHUB_WORKSPACE/files .
           chmod +x files/etc/rc.local
 
+      - name: Make Info
+        run: |
+          cd immortalwrt-imagebuilder-$DEVICE_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
+          chmod +x $GITHUB_WORKSPACE/scripts/*
+          $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
+          make info
+      
       - name: Build RootFS
         run: |
           cd immortalwrt-imagebuilder-$DEVICE_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
@@ -136,7 +143,16 @@ jobs:
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
           export CONFIG_PACKAGES=$(cat $GITHUB_WORKSPACE/config/packages_ax3600.config | tr -s "\n" " ")
           #make image PACKAGES="$CONFIG_PACKAGES" FILES="files" 只编译不生成docker
-          make image PACKAGES="$CONFIG_PACKAGES"
+          make image PROFILE="$DEVICE_PLATFORM" PACKAGES="$CONFIG_PACKAGES"
+       
+      - name: Copy target
+        run: |  
+          ls -llah bin/targets/$DEVICE_TARGET
+          echo "---------"
+          ls -llah bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
+          echo "---------"
+          ls -llah bin/targets/$DEVICE_TARGET/$DEVICE_PLATFORM
+          echo "---------"
           #cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz $GITHUB_WORKSPACE
           cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*.bin $GITHUB_WORKSPACE/immortalwrt_23.05-SNAPSHOT_ax3600.bin
           cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*.ubi $GITHUB_WORKSPACE/immortalwrt_23.05-SNAPSHOT_ax3600.ubi
