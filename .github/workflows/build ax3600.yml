@@ -62,7 +62,7 @@ jobs:
         run: |
           cd immortalwrt-imagebuilder-$DEVICE_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
           chmod +x $GITHUB_WORKSPACE/scripts/*
-          $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
+          #$GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
           make info
       
       - name: Build RootFS
