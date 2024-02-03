@@ -86,20 +86,20 @@ jobs:
           #cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*.ubi $GITHUB_WORKSPACE/immortalwrt_23.05-SNAPSHOT_ax3600.ubi
           mv bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET $GITHUB_WORKSPACE/bin
 
-      - name: Upload Image
+      # - name: Upload Image
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: image
+      #     path: ./bin
+      
+      - name: Upload Image ubi
         uses: actions/upload-artifact@v4
         with:
-          name: image
-          path: ./bin
+          name: immortalwrt_23.05-SNAPSHOT_ax3600.ubi
+          path: ./bin/*.ubi
       
-      # - name: Upload Image ubi
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: immortalwrt_23.05-SNAPSHOT_ax3600.ubi
-      #     path: immortalwrt_23.05-SNAPSHOT_ax3600.ubi
-      
-      # - name: Upload Image bin
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: immortalwrt_23.05-SNAPSHOT_ax3600.bin
-      #     path: immortalwrt_23.05-SNAPSHOT_ax3600.bin
+      - name: Upload Image bin
+        uses: actions/upload-artifact@v4
+        with:
+          name: immortalwrt_23.05-SNAPSHOT_ax3600.bin
+          path: ./bin/*.bin
