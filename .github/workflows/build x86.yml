@@ -101,8 +101,9 @@ jobs:
       - name: Upload Image rootfs
         uses: actions/upload-artifact@v4
         with:
-          name: immortalwrt_23.05-x86_64_rootfS.tar.gz
+          name: immortalwrt_23.05-x86_64_rootfs.tar.gz.zip
           path: ./bin/*.tar.gz
+          compression-level: 0
       
       - name: Upload Image vmdk
         uses: actions/upload-artifact@v4
