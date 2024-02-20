@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build x86_64 Images
+name: Build x86_64 snapshot Images
 
 env:
   PREFIX_URL: https://downloads.immortalwrt.org/snapshots/targets
