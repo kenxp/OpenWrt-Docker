@@ -1,0 +1,112 @@
+#=================================================
+# https://github.com/P3TERX/Actions-OpenWrt
+# Description: Build OpenWrt using GitHub Actions
+# Lisence: MIT
+# Author: P3TERX
+# Blog: https://p3terx.com
+#=================================================
+
+name: Build x86_64 Images
+
+env:
+  PREFIX_URL: https://downloads.immortalwrt.org/snapshots/targets
+  DEVICE_VERSION: SNAPSHOT
+  DEVICE_PLATFORM: generic
+  DEVICE_TARGET: x86
+  DEVICE_SUBTARGET: 64
+ 
+on:
+  workflow_dispatch:
+    # inputs:
+    #   INPUT_TARGET:
+    #     description: "Target to build (platform/target/subtarget)"
+    #     required: false
+    #     default: "all"
+  #schedule:
+  #  - cron: 0 0 * * *
+
+jobs:
+  
+  Docker-Images:
+    name: Build Image
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialization Environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install build-essential libncurses5-dev libncursesw5-dev \
+            zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip python3 qemu-utils genisoimage
+
+      - name: Download Image Builder
+        run: |
+          echo url:$PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.xz
+          wget -q $PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.xz
+
+      - name: Set Image Builder
+        run: |
+          tar -xJf *.tar.xz
+          rm -rf *.xz
+          cd immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
+          cp -rf $GITHUB_WORKSPACE/files .
+          chmod +x files/etc/rc.local
+
+      - name: Make Info
+        run: |
+          cd immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
+          chmod +x $GITHUB_WORKSPACE/scripts/*
+          #$GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
+          make info
+      
+      - name: Build RootFS
+        run: |
+          cd immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
+          chmod +x $GITHUB_WORKSPACE/scripts/*
+          
+          # 修改image生成种类
+          sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS/# CONFIG_TARGET_ROOTFS_SQUASHFS/' .config
+          sed -i 's/CONFIG_GRUB_EFI_IMAGES/# CONFIG_GRUB_EFI_IMAGES/' .config
+          sed -i 's/CONFIG_ISO_IMAGES/# CONFIG_ISO_IMAGES/' .config
+          sed -i 's/CONFIG_QCOW2_IMAGES/# CONFIG_QCOW2_IMAGES/' .config
+          sed -i 's/CONFIG_VDI_IMAGES/# CONFIG_VDI_IMAGES/' .config
+          sed -i 's/CONFIG_VHDX_IMAGES/# CONFIG_VHDX_IMAGES/' .config
+          sed -i 's/CONFIG_TARGET_IMAGES_GZIP/# CONFIG_TARGET_IMAGES_GZIP/' .config
+
+          export CONFIG_PACKAGES=$(cat $GITHUB_WORKSPACE/config/packages.config | tr -s "\n" " ")
+          #make image PACKAGES="$CONFIG_PACKAGES" FILES="files" 只编译不生成docker
+          make image PROFILE="$DEVICE_PLATFORM" PACKAGES="$CONFIG_PACKAGES"
+       
+      - name: Copy target
+        run: |  
+          cd immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
+          echo bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
+          ls -llah bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
+          echo "---------"
+          
+          mv bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET $GITHUB_WORKSPACE/bin
+
+      # - name: Upload Image
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: image
+      #     path: ./bin
+      
+      - name: Upload Image rootfs
+        uses: actions/upload-artifact@v4
+        with:
+          name: immortalwrt_snapshot-x86_64_rootfs.tar.gz.zip
+          path: ./bin/*.tar.gz
+          compression-level: 0
+      
+      - name: Upload Image vmdk
+        uses: actions/upload-artifact@v4
+        with:
+          name: immortalwrt_snapshot-x86_64.vmdk.zip
+          path: ./bin/*.vmdk
